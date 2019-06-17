@@ -14,16 +14,20 @@ let db = new sqlite3.Database(dbPath, (err) => {
 })
 
 router.get('/', function(req, res, next) {
-	console.log('--------test-------');
-	// db.run("SELECT * FROM TBL_SITE");
 	let arr = [];
-	db.all("SELECT NO_SITE AS NO, NAME, URL, ASIS, TOBE, YN_CHANGE FROM TBL_SITE", function(err, rows) {
-		arr.push(rows);
+	const params = [];
+	db.all("SELECT NO_SITE AS no, NAME AS name, URL AS url, ASIS AS asis, TOBE AS tobe, YN_CHANGE AS yn_change FROM TBL_SITE", params, (err, rows) => {
+		if(err) {
+			res.status(400).json({"error":err.message});
+			return;
+		} else {
+			// res.json({
+			// 	"message":"success",
+			// 	"data":rows
+			// })
+			res.send(rows);
+		}
 	})
-	console.log('--------//test-----------')
-	console.log(arr);
-	res.send(arr);
-	console.log(arr);
 });
 
 module.exports = router;
