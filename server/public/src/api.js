@@ -13,9 +13,9 @@ let db = new sqlite3.Database(dbPath, (err) => {
 	} 
 })
 
-let settingList = function (siteRows, matserRows, detailRows) {
+let settingList = function (siteRows, masterRows, detailRows) {
 	let returnArr = [];
-	
+	console.log(siteRows, masterRows, detailRows);
 }
 
 router.get('/list', function(req, res, next) {
@@ -41,7 +41,7 @@ router.get('/list', function(req, res, next) {
 							return;
 						} else {
 							detailRows = rows;
-							settingList(siteRows, masterRows, detailRows)
+							settingList(siteRows, masterRows, detailRows);
 						}
 					})
 				}
