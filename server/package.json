@@ -15,6 +15,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11",
+    "request-promise": "^4.2.4",
     "sqlite3": "^4.0.9",
     "utf8": "^3.0.0"
   }

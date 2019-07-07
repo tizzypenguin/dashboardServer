@@ -7,6 +7,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const utf8 = require('utf8')
 const fn = require('./fn.js')
+const rp = require('request-promise');
 
 let db = new sqlite3.Database(dbPath, (err) => { 
 	if (err) { 
@@ -83,28 +84,35 @@ router.get('/list', function(req, res, next) {
 // 		}
 // 	});
 // });
-const getHtml = function() {
-	try {
-		return axios.get("http://www.q-net.or.kr/crf021.do?id=crf02101s03&IMPL_YY=2019&SERIES_CD=03");
-	} catch (error) {
-		console.error(error);
-		return null;
-	}
-};
+// const getHtml = function(callback) {
+// 	try {
+// 		let html = axios.get("http://www.q-net.or.kr/crf021.do?id=crf02101s03&IMPL_YY=2019&SERIES_CD=03");
+// 		if(callback) {
+// 			callback(html);
+// 		}
+// 		return null;
+// 	} catch (error) {
+// 		console.error(error);
+// 		return null;
+// 	}
+// };
+
+
 
 router.get('/get', function(req, res, next) {
-	getHtml().then(html => {
-		if(html) {
-			// console.log("html:", html);
-			// res.send({html: html.data});
-			let htmlData = utf8.encode(html.data);
-			console.log(htmlData);
-			const $ = cheerio.load(htmlData);
-			console.log($);
-			res.send({html: $("body")});
-		} else {
-			res.status(400).json({"error":"사이트 조회에 실패했습니다"})
-		}
+  rp("http://www.q-net.or.kr/crf021.do?id=crf02101s03&IMPL_YY=2019&SERIES_CD=03")
+  // rp("https://google.com")
+	.then(function(html){
+	  if(html) {
+      console.log(html);
+      res.send({html: html});
+	  } else {
+      res.status(400).json({"error":"사이트 조회에 실패했습니다"})
+    }
+	})
+	.catch(function(err){
+    console.log(err);
+		res.status(400).json({"error":"사이트 조회에 실패했습니다"})
 	});
 });
 
